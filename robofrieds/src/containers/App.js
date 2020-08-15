@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Sticky from '../components/Sticky';
+import ErrorBoundry from '../components/ErrorBoundry';
 import { robots } from '../data/robots';
 
 const usersUrl = 'https://jsonplaceholder.typicode.com/users';
@@ -46,7 +47,9 @@ export default class App extends Component {
           <SearchBox handleSearchChange={this.handleSearchChange} />
         </Sticky>
 
-        <CardList robots={filteredRobots} />
+        <ErrorBoundry>
+          <CardList robots={filteredRobots} />
+        </ErrorBoundry>
       </div>
     );
   }
