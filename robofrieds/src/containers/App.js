@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Sticky from '../components/Sticky';
 import ErrorBoundry from '../components/ErrorBoundry';
 import { robots } from '../data/robots';
 
+import { setSearchField } from '../redux/actions';
+
 const usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       robots: [],
-      searchFiled: '',
+      searchField: '',
     };
-    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -27,15 +29,12 @@ export default class App extends Component {
       });
   }
 
-  handleSearchChange({ target: { value } }) {
-    this.setState({ searchFiled: value });
-  }
-
   render() {
-    const { robots, searchFiled } = this.state;
+    const { robots } = this.state;
+    const { searchField } = this.props;
 
     const filteredRobots = robots.filter((robot) =>
-      robot.name.toLowerCase().includes(searchFiled.toLowerCase())
+      robot.name.toLowerCase().includes(searchField.toLowerCase())
     );
 
     return !robots.length ? (
@@ -44,7 +43,7 @@ export default class App extends Component {
       <div className='tc'>
         <Sticky>
           <h1 className='f1'>Robofriends</h1>
-          <SearchBox handleSearchChange={this.handleSearchChange} />
+          <SearchBox handleSearchChange={this.props.handleSearchChange} />
         </Sticky>
 
         <ErrorBoundry>
@@ -54,3 +53,14 @@ export default class App extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  searchField: state.searchField,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  handleSearchChange: ({ target: { value } }) =>
+    dispatch(setSearchField(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
