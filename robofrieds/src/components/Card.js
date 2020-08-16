@@ -10,7 +10,15 @@ export default function Card({ name, username, email, id }) {
       />
       <div>
         <h2>{name}</h2>
-        <h3>{username}</h3>
+        <h3
+          style={{
+            fontFamily: 'sega',
+            fontWeight: '100',
+            color: 'plum',
+          }}
+        >
+          {username}
+        </h3>
         <p>{email}</p>
       </div>
     </li>

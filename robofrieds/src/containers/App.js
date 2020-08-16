@@ -31,7 +31,7 @@ class App extends Component {
 
   render() {
     const { robots } = this.state;
-    const { searchField } = this.props;
+    const { searchField, handleSearchChange } = this.props;
 
     const filteredRobots = robots.filter((robot) =>
       robot.name.toLowerCase().includes(searchField.toLowerCase())
@@ -43,7 +43,7 @@ class App extends Component {
       <div className='tc'>
         <Sticky>
           <h1 className='f1'>Robofriends</h1>
-          <SearchBox handleSearchChange={this.props.handleSearchChange} />
+          <SearchBox handleSearchChange={handleSearchChange} />
         </Sticky>
 
         <ErrorBoundry>

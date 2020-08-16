@@ -1,4 +1,7 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { searchRobots } from './reducers';
+import { createLogger } from 'redux-logger';
 
-export const store = createStore(searchRobots);
+const logger = createLogger();
+
+export const store = createStore(searchRobots, applyMiddleware(logger));
