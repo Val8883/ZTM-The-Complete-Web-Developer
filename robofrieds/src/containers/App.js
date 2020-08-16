@@ -4,41 +4,25 @@ import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Sticky from '../components/Sticky';
 import ErrorBoundry from '../components/ErrorBoundry';
-import { robots } from '../data/robots';
 
-import { setSearchField } from '../redux/actions';
+import { setSearchField, requestRobots } from '../redux/actions';
 
-const usersUrl = 'https://jsonplaceholder.typicode.com/users';
+// const usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      robots: [],
-      searchField: '',
-    };
-  }
-
   componentDidMount() {
-    fetch(usersUrl)
-      .then((res) => res.json())
-      .then((users) => this.setState({ robots: users }))
-      .catch((error) => {
-        console.log(error);
-        this.setState({ robots });
-      });
+    this.props.handleReauestRobots();
   }
 
   render() {
-    const { robots } = this.state;
-    const { searchField, handleSearchChange } = this.props;
+    const { searchField, handleSearchChange, robots, isPending } = this.props;
 
     const filteredRobots = robots.filter((robot) =>
       robot.name.toLowerCase().includes(searchField.toLowerCase())
     );
 
-    return !robots.length ? (
-      <h1 className='tc f1'>Loading...</h1>
+    return isPending ? (
+      <h1 className='tc f1'>'Loading...' </h1>
     ) : (
       <div className='tc'>
         <Sticky>
@@ -55,12 +39,16 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  searchField: state.searchField,
+  searchField: state.searchRobots.searchField,
+  robots: state.requestRobots.robots,
+  isPending: state.requestRobots.isPending,
+  error: state.requestRobots.error,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   handleSearchChange: ({ target: { value } }) =>
     dispatch(setSearchField(value)),
+  handleReauestRobots: () => requestRobots(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
